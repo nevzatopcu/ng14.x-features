@@ -1,34 +1,28 @@
-import {
-  Component,
-  EnvironmentInjector,
-  inject,
-  InjectionToken,
-  OnInit,
-} from '@angular/core';
-
-export const TOKEN = new InjectionToken('Injection Token');
+import { Component, inject, OnInit } from '@angular/core';
+import { FormBuilder, ReactiveFormsModule, FormControl } from '@angular/forms';
 
 @Component({
-  selector: 'app-root',
+  selector: 'app-form',
   template: ``,
   standalone: true,
-  providers: [
-    {
-      provide: TOKEN,
-      useValue: 'fromAppComponent',
-    },
-  ],
+  imports: [ReactiveFormsModule],
 })
-export class AppComponent implements OnInit {
-  readonly token = inject<string>(TOKEN);
-  readonly envInjector = inject(EnvironmentInjector);
+export class FormComponent implements OnInit {
+  readonly fb = inject(FormBuilder);
+
+  formRecord = this.fb.record<FormControl<string>>({
+    foo: this.fb.control('', { nonNullable: true }),
+  });
 
   ngOnInit(): void {
-    this.envInjector.runInContext(() => {
-      console.log({
-        tokenInComponent: this.token, // fromAppComponent
-        fromEnvironment: inject(TOKEN, { optional: true }), // No provider found as we did not provide it on root level
-      });
-    });
+    this.formRecord.addControl(
+      'bar',
+      this.fb.control('', { nonNullable: true })
+    ); // okay
+
+    // this.formRecord.addControl('baz', this.fb.control('')); // error. It needs to be nonNullable
+    // this.formRecord.addControl('qux', this.fb.control(0, {nonNullable: true})); // error. It needs to be string.
+
+    this.formRecord.removeControl('bar'); // okay
   }
 }
