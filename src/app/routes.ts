@@ -1,8 +1,10 @@
-import { Routes } from '@angular/router';
+import { Route, Routes, UrlSegment } from '@angular/router';
 import { UserDashboardComponent } from './user-dashboard.component';
 import { AdminDashboardComponent } from './admin-dashboard.component';
-import { MatchAdminGuard } from './match-admin.guard';
 import { HomeComponent } from './home.component';
+import { AuthService } from './auth.service';
+import { inject } from '@angular/core';
+import { first } from 'rxjs';
 
 export const routes: Routes = [
   {
@@ -13,7 +15,10 @@ export const routes: Routes = [
   {
     path: 'dashboard',
     component: AdminDashboardComponent,
-    canMatch: [MatchAdminGuard],
+    canMatch: [
+      (route: Route, segments: UrlSegment[]) =>
+        inject(AuthService).isAdmin$.pipe(first()),
+    ],
   },
   {
     path: 'dashboard',
