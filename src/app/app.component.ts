@@ -1,17 +1,19 @@
-import { NgIf } from '@angular/common';
+import { NgOptimizedImage, provideImgixLoader } from '@angular/common';
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-root',
+  selector: 'app-cat-image',
   template: `
-    <button (click)="show = !show">{{ show ? 'hide' : 'show' }}</button>
-    show = {{ show }}
-    <br />
-    <div *ngIf="show">Text to show</div>
+    <img
+      ngSrc="hermes2.jpeg"
+      width="1791"
+      height="1008"
+      priority
+      ngSrcset="100w, 200w, 1000w, 2000w"
+    />
   `,
   standalone: true,
-  imports: [NgIf],
+  imports: [NgOptimizedImage],
+  providers: [provideImgixLoader('https://aurora-project.imgix.net')],
 })
-export class AppComponent {
-  show = true;
-}
+export class CatImageComponent {}
