@@ -1,1 +1,35 @@
-/* You can add global styles to this file, and also import other style files */
+a {
+  background-color: #e7726a;
+  color: white;
+  padding: 14px 25px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  margin-left: 2rem;
+}
+
+a.active {
+  background-color: #ff1100;
+}
+
+main {
+  padding: 2rem;
+  border: 1px dashed;
+  margin-top: 2rem;
+}
+
+span {
+  display: block;
+}
+
+button {
+  background-color: #555555;
+  border: none;
+  cursor: pointer;
+  color: white;
+  padding: 7px 15px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+}
