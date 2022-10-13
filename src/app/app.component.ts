@@ -5,13 +5,15 @@ import {
   InjectionToken,
   OnInit,
 } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
 
 export const TOKEN = new InjectionToken('Injection Token');
 
 @Component({
   selector: 'app-root',
-  template: ``,
+  template: `<router-outlet></router-outlet>`,
   standalone: true,
+  imports: [RouterModule],
   providers: [
     {
       provide: TOKEN,
@@ -19,15 +21,21 @@ export const TOKEN = new InjectionToken('Injection Token');
     },
   ],
 })
-export class AppComponent implements OnInit {
-  readonly token = inject<string>(TOKEN);
+export class AppComponent {}
+
+@Component({
+  template: '',
+  standalone: true,
+})
+export class LazyComponent {
   readonly envInjector = inject(EnvironmentInjector);
+  readonly token = inject(TOKEN);
 
   ngOnInit(): void {
     this.envInjector.runInContext(() => {
       console.log({
-        tokenInComponent: this.token, // fromAppComponent
-        fromEnvironment: inject(TOKEN, { optional: true }), // No provider found as we did not provide it on root level
+        fromInjector: this.token, // "fromAppComponent"
+        fromEnvironmentInjector: inject(TOKEN), // "fromRouteProviders"
       });
     });
   }
